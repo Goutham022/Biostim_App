@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 import '../core/connection_provider.dart';
 import '../widgets/feature_card.dart';
 import 'onboarding_overlay.dart';
+import 'fes_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -63,11 +64,19 @@ class HomeScreen extends StatelessWidget {
                       const SizedBox(height: 40),
                       
                       // Feature Cards
-                      const FeatureCard(
+                      FeatureCard(
                         title: 'Functional Electrical\nStimulation (FES)',
                         subtitle: 'Subhead',
                         avatarBg: avatarBg,
                         trailingBg: trailingBg,
+                        onTap: () {
+                          Navigator.push(
+                            context,
+                            MaterialPageRoute(
+                              builder: (context) => const FESScreen(),
+                            ),
+                          );
+                        },
                       ),
                       const SizedBox(height: 16),
                       const FeatureCard(

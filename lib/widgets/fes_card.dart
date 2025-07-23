@@ -1,40 +1,35 @@
 import 'package:flutter/material.dart';
 
-class FeatureCard extends StatelessWidget {
+class FESCard extends StatelessWidget {
   final String title;
-  final String subtitle;
-  final Color avatarBg;
-  final Color trailingBg;
-  final VoidCallback? onTap;
+  final VoidCallback onTap;
 
-  const FeatureCard({
+  const FESCard({
     super.key,
     required this.title,
-    required this.subtitle,
-    required this.avatarBg,
-    required this.trailingBg,
-    this.onTap,
+    required this.onTap,
   });
 
   @override
   Widget build(BuildContext context) {
     return Material(
-      color: const Color(0xFFF6F1F9),
+      color: const Color(0xFFF6F1F9), // Light purple background
       elevation: 1,
       borderRadius: BorderRadius.circular(16),
       child: InkWell(
         onTap: onTap,
         borderRadius: BorderRadius.circular(16),
         child: SizedBox(
-          width: 360,
-          height: 104,
+          width: double.infinity,
+          height: 80,
           child: Row(
             children: [
+              // Avatar
               Padding(
                 padding: const EdgeInsets.all(12.0),
                 child: CircleAvatar(
                   radius: 24,
-                  backgroundColor: avatarBg,
+                  backgroundColor: const Color(0xFFDDD2F1), // Darker purple
                   child: const Text(
                     'A',
                     style: TextStyle(
@@ -45,33 +40,29 @@ class FeatureCard extends StatelessWidget {
                   ),
                 ),
               ),
+
+              // Title
               Expanded(
                 child: Padding(
                   padding: const EdgeInsets.symmetric(vertical: 16),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Text(title,
-                          style: const TextStyle(
-                              fontSize: 16, fontWeight: FontWeight.w600)),
-                      const SizedBox(height: 4),
-                      Text(
-                        subtitle,
-                        style: Theme.of(context)
-                            .textTheme
-                            .bodySmall
-                            ?.copyWith(color: Colors.grey[700]),
-                      ),
-                    ],
+                  child: Text(
+                    title,
+                    style: const TextStyle(
+                      fontSize: 18,
+                      fontWeight: FontWeight.w600,
+                      color: Colors.black,
+                    ),
                   ),
                 ),
               ),
+
+              // Trailing Icons
               Container(
-                width: 82,
+                width: 60,
                 height: double.infinity,
-                decoration: BoxDecoration(
-                  color: trailingBg,
-                  borderRadius: const BorderRadius.only(
+                decoration: const BoxDecoration(
+                  color: Color(0xFFE9E2F0), // Light gray section
+                  borderRadius: BorderRadius.only(
                     topRight: Radius.circular(16),
                     bottomRight: Radius.circular(16),
                   ),
@@ -79,9 +70,9 @@ class FeatureCard extends StatelessWidget {
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.spaceEvenly,
                   children: const [
-                    Icon(Icons.change_history, size: 26),
-                    Icon(Icons.settings, size: 26),
-                    Icon(Icons.crop_square, size: 26),
+                    Icon(Icons.keyboard_arrow_up, size: 20, color: Colors.grey),
+                    Icon(Icons.settings, size: 20, color: Colors.grey),
+                    Icon(Icons.crop_square, size: 20, color: Colors.grey),
                   ],
                 ),
               ),
