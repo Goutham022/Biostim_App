@@ -13,7 +13,14 @@ class _FootDropScreenState extends State<FootDropScreen> {
   int currentIntensity = 7;
   bool isPlaying = false;
   final TextEditingController triggerAngleController = TextEditingController(text: '15');
-  final TextEditingController stimulationDurationController = TextEditingController(text: '200');
+  
+  // Dropdown values
+  int selectedStimulationDuration = 5; // Default value
+  int selectedPulseWidth = 30; // Default value
+  
+  // Dropdown options
+  final List<int> stimulationDurationOptions = List.generate(10, (index) => index + 1); // 1 to 10
+  final List<int> pulseWidthOptions = [10, 20, 30, 40, 50]; // Only tens
 
   @override
   void initState() {
@@ -23,7 +30,6 @@ class _FootDropScreenState extends State<FootDropScreen> {
   @override
   void dispose() {
     triggerAngleController.dispose();
-    stimulationDurationController.dispose();
     super.dispose();
   }
 
@@ -57,7 +63,8 @@ class _FootDropScreenState extends State<FootDropScreen> {
   void _updateAdvancedSettings() {
     // TODO: Send advanced settings to ESP32
     print('Trigger Angle: ${triggerAngleController.text}');
-    print('Stimulation Duration: ${stimulationDurationController.text}');
+    print('Stimulation Duration: $selectedStimulationDuration');
+    print('Pulse Width: $selectedPulseWidth');
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
         content: Text('Advanced settings updated!'),
@@ -195,7 +202,7 @@ class _FootDropScreenState extends State<FootDropScreen> {
             
             const SizedBox(height: 16),
             
-            // Stimulation Duration Input
+            // Stimulation Duration Dropdown
             Row(
               children: [
                 const Text(
@@ -207,17 +214,76 @@ class _FootDropScreenState extends State<FootDropScreen> {
                 ),
                 const SizedBox(width: 20),
                 Expanded(
-                  child: TextField(
-                    controller: stimulationDurationController,
-                    keyboardType: TextInputType.number,
-                    decoration: InputDecoration(
-                      filled: true,
-                      fillColor: Colors.pink[50],
-                      border: OutlineInputBorder(
-                        borderRadius: BorderRadius.circular(8),
-                        borderSide: const BorderSide(color: Colors.black),
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                    decoration: BoxDecoration(
+                      color: Colors.pink[50],
+                      border: Border.all(color: Colors.black),
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton<int>(
+                        value: selectedStimulationDuration,
+                        isExpanded: true,
+                        items: stimulationDurationOptions.map((int value) {
+                          return DropdownMenuItem<int>(
+                            value: value,
+                            child: Text('$value'),
+                          );
+                        }).toList(),
+                        onChanged: (int? newValue) {
+                          if (newValue != null) {
+                            setState(() {
+                              selectedStimulationDuration = newValue;
+                            });
+                          }
+                        },
                       ),
-                      contentPadding: const EdgeInsets.symmetric(horizontal: 12, vertical: 8),
+                    ),
+                  ),
+                ),
+              ],
+            ),
+            
+            const SizedBox(height: 16),
+            
+            // Pulse Width Dropdown
+            Row(
+              children: [
+                const Text(
+                  'Pulse Width:',
+                  style: TextStyle(
+                    fontSize: 16,
+                    fontWeight: FontWeight.w500,
+                  ),
+                ),
+                const SizedBox(width: 20),
+                Expanded(
+                  child: Container(
+                    padding: const EdgeInsets.symmetric(horizontal: 12),
+                                         decoration: BoxDecoration(
+                       color: Colors.pink[50],
+                       border: Border.all(color: Colors.black),
+                       borderRadius: BorderRadius.circular(8),
+                     ),
+                    child: DropdownButtonHideUnderline(
+                      child: DropdownButton<int>(
+                        value: selectedPulseWidth,
+                        isExpanded: true,
+                        items: pulseWidthOptions.map((int value) {
+                          return DropdownMenuItem<int>(
+                            value: value,
+                            child: Text('$value'),
+                          );
+                        }).toList(),
+                        onChanged: (int? newValue) {
+                          if (newValue != null) {
+                            setState(() {
+                              selectedPulseWidth = newValue;
+                            });
+                          }
+                        },
+                      ),
                     ),
                   ),
                 ),
