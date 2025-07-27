@@ -1,3 +1,4 @@
+import 'package:http/http.dart' as http;
 import 'dart:convert';
 import 'dart:io';
 import '../models/device_info.dart';
@@ -33,34 +34,59 @@ class ESP32Service {
   }
 
   /// Send intensity/strength data to ESP32
+  // static Future<bool> sendIntensity(int strength) async {
+  //   try {
+  //     final client = HttpClient();
+  //     client.connectionTimeout = Duration(seconds: timeoutSeconds);
+      
+  //     final request = await client.postUrl(Uri.parse('$baseUrl/strength'));
+  //     request.headers.set('Content-Type', 'application/json');
+      
+  //     // Create JSON payload
+  //     final jsonData = {'strength': strength};
+  //     final jsonString = json.encode(jsonData);
+      
+  //     // Send the data
+  //     request.write(jsonString);
+  //     final response = await request.close().timeout(Duration(seconds: timeoutSeconds));
+      
+  //     if (response.statusCode == 200) {
+  //       print('Intensity sent successfully: $strength');
+  //       return true;
+  //     } else {
+  //       print('Failed to send intensity. Status: ${response.statusCode}');
+  //       return false;
+  //     }
+  //   } catch (e) {
+  //     print('Error sending intensity: $e');
+  //     return false;
+  //   }
+  // }
+
+
   static Future<bool> sendIntensity(int strength) async {
-    try {
-      final client = HttpClient();
-      client.connectionTimeout = Duration(seconds: timeoutSeconds);
-      
-      final request = await client.postUrl(Uri.parse('$baseUrl/strength'));
-      request.headers.set('Content-Type', 'application/json');
-      
-      // Create JSON payload
-      final jsonData = {'strength': strength};
-      final jsonString = json.encode(jsonData);
-      
-      // Send the data
-      request.write(jsonString);
-      final response = await request.close().timeout(Duration(seconds: timeoutSeconds));
-      
-      if (response.statusCode == 200) {
-        print('Intensity sent successfully: $strength');
-        return true;
-      } else {
-        print('Failed to send intensity. Status: ${response.statusCode}');
-        return false;
-      }
-    } catch (e) {
-      print('Error sending intensity: $e');
+  try {
+    final url = Uri.parse('$baseUrl/strength');
+    final jsonData = json.encode({'strength': strength});
+
+    final response = await http.post(
+      url,
+      headers: {'Content-Type': 'application/json'},
+      body: jsonData,
+    );
+
+    if (response.statusCode == 200) {
+      print('Intensity sent successfully: $strength');
+      return true;
+    } else {
+      print('Failed to send intensity. Status: ${response.statusCode}');
       return false;
     }
+  } catch (e) {
+    print('Error sending intensity: $e');
+    return false;
   }
+}
 
   /// Test connection to ESP32
   static Future<bool> testConnection() async {
