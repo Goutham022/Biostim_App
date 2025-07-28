@@ -1,6 +1,8 @@
 import 'package:flutter/material.dart';
 import '../widgets/graph_widget.dart';
 import '../widgets/intensity_slider.dart';
+import 'package:http/http.dart' as http;
+import 'dart:convert';
 
 class FootDropScreen extends StatefulWidget {
   const FootDropScreen({super.key});
@@ -60,18 +62,67 @@ class _FootDropScreenState extends State<FootDropScreen> {
     );
   }
 
-  void _updateAdvancedSettings() {
-    // TODO: Send advanced settings to ESP32
-    print('Trigger Angle: ${triggerAngleController.text}');
-    print('Stimulation Duration: $selectedStimulationDuration');
-    print('Pulse Width: $selectedPulseWidth');
+/////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////
+  // void _updateAdvancedSettings() {
+  //   // TODO: Send advanced settings to ESP32
+  //   print('Trigger Angle: ${triggerAngleController.text}');
+  //   print('Stimulation Duration: $selectedStimulationDuration');
+  //   print('Pulse Width: $selectedPulseWidth');
+  //   ScaffoldMessenger.of(context).showSnackBar(
+  //     const SnackBar(
+  //       content: Text('Advanced settings updated!'),
+  //       duration: Duration(seconds: 2),
+  //     ),
+  //   );
+  // }
+
+
+  void _updateAdvancedSettings() async {
+  final url = Uri.parse('http://192.168.4.1/updateAdvance');
+  final payload = {
+    'triggerAngle': int.tryParse(triggerAngleController.text) ?? 0,
+    'stimulationDuration': selectedStimulationDuration,
+    'pulseWidth': selectedPulseWidth,
+  };
+
+  try {
+    final response = await http.post(
+      url,
+      headers: {'Content-Type': 'application/json'},
+      body: json.encode(payload),
+    );
+
+    if (response.statusCode == 200) {
+      print('Advanced settings sent successfully');
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Advanced settings updated!'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+    } else {
+      print('Failed to send advanced settings. Status: ${response.statusCode}');
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Failed to update settings'),
+          duration: Duration(seconds: 2),
+        ),
+      );
+    }
+  } catch (e) {
+    print('Error sending advanced settings: $e');
     ScaffoldMessenger.of(context).showSnackBar(
       const SnackBar(
-        content: Text('Advanced settings updated!'),
+        content: Text('Connection error'),
         duration: Duration(seconds: 2),
       ),
     );
   }
+}
+
+
+
+////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////////nithin 
 
   @override
   Widget build(BuildContext context) {
