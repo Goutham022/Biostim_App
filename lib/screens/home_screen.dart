@@ -4,6 +4,7 @@ import '../core/connection_provider.dart';
 import '../widgets/feature_card.dart';
 import 'onboarding_overlay.dart';
 import 'fes_screen.dart';
+import 'biofeedback_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -78,13 +79,21 @@ class HomeScreen extends StatelessWidget {
                           );
                         },
                       ),
-                      const SizedBox(height: 16),
-                      const FeatureCard(
-                        title: 'Biofeedback (for training)',
-                        subtitle: 'Subhead',
-                        avatarBg: avatarBg,
-                        trailingBg: trailingBg,
-                      ),
+                                                   const SizedBox(height: 16),
+                             FeatureCard(
+                               title: 'Biofeedback (for training)',
+                               subtitle: 'Subhead',
+                               avatarBg: avatarBg,
+                               trailingBg: trailingBg,
+                               onTap: () {
+                                 Navigator.push(
+                                   context,
+                                   MaterialPageRoute(
+                                     builder: (context) => const BiofeedbackScreen(),
+                                   ),
+                                 );
+                               },
+                             ),
                       const SizedBox(height: 16),
                       const FeatureCard(
                         title: 'FES + Biofeedback',

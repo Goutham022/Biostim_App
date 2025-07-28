@@ -100,18 +100,72 @@ class ESP32Service {
     }
   }
 
-  /// Send command to ESP32 (for future use)
+    /// Send command to ESP32 (for future use)
   static Future<bool> sendCommand(String command) async {
     try {
       final client = HttpClient();
       client.connectionTimeout = Duration(seconds: timeoutSeconds);
-      
+
       final request = await client.getUrl(Uri.parse('$baseUrl/$command'));
       final response = await request.close().timeout(Duration(seconds: timeoutSeconds));
-      
+
       return response.statusCode == 200;
     } catch (e) {
       print('Error sending command: $e');
+      return false;
+    }
+  }
+
+  /// Get count data from ESP32
+  static Future<int> getCountFromESP32() async {
+    try {
+      final client = HttpClient();
+      client.connectionTimeout = Duration(seconds: timeoutSeconds);
+
+      final request = await client.getUrl(Uri.parse('$baseUrl/count'));
+      final response = await request.close().timeout(Duration(seconds: timeoutSeconds));
+
+      if (response.statusCode == 200) {
+        final responseBody = await response.transform(utf8.decoder).join();
+        final jsonData = json.decode(responseBody) as Map<String, dynamic>;
+        
+        final count = jsonData['count'] ?? 0;
+        print('Count fetched from ESP32: $count');
+        return count;
+      } else {
+        print('Failed to fetch count. Status: ${response.statusCode}');
+        return 0;
+      }
+    } catch (e) {
+      print('Error fetching count from ESP32: $e');
+      return 0;
+    }
+  }
+
+  /// Reset count on ESP32
+  static Future<bool> resetCount() async {
+    try {
+      final client = HttpClient();
+      client.connectionTimeout = Duration(seconds: timeoutSeconds);
+
+      final request = await client.postUrl(Uri.parse('$baseUrl/reset'));
+      request.headers.set('Content-Type', 'application/json');
+
+      final jsonData = {'reset': true};
+      final jsonString = json.encode(jsonData);
+
+      request.write(jsonString);
+      final response = await request.close().timeout(Duration(seconds: timeoutSeconds));
+
+      if (response.statusCode == 200) {
+        print('Count reset successfully');
+        return true;
+      } else {
+        print('Failed to reset count. Status: ${response.statusCode}');
+        return false;
+      }
+    } catch (e) {
+      print('Error resetting count: $e');
       return false;
     }
   }
