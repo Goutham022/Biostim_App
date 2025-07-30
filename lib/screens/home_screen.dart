@@ -5,6 +5,7 @@ import '../widgets/feature_card.dart';
 import 'onboarding_overlay.dart';
 import 'fes_screen.dart';
 import 'biofeedback_screen.dart';
+import 'connect_wifi_screen.dart';
 
 class HomeScreen extends StatelessWidget {
   const HomeScreen({super.key});
@@ -52,7 +53,7 @@ class HomeScreen extends StatelessWidget {
                         ],
                       ),
                       
-                      const SizedBox(height: 20),
+                      const SizedBox(height: 2),
                       
                       // Device Information or Connect Button
                       Align(
@@ -60,6 +61,38 @@ class HomeScreen extends StatelessWidget {
                         child: connection.isConnected
                             ? _buildDeviceInfoText(connection)
                             : _buildConnectButton(connection),
+                      ),
+                      
+                      // WiFi Connection Button (always visible)
+                      const SizedBox(height: 20),
+                      Align(
+                        alignment: Alignment.centerLeft,
+                        child: ElevatedButton.icon(
+                          onPressed: () {
+                            Navigator.push(
+                              context,
+                              MaterialPageRoute(
+                                builder: (context) => const ConnectWifiScreen(),
+                              ),
+                            );
+                          },
+                          icon: const Icon(Icons.wifi, color: Colors.white),
+                          label: const Text(
+                            'Connect to WiFi',
+                            style: TextStyle(
+                              color: Colors.white,
+                              fontSize: 16,
+                              fontWeight: FontWeight.w600,
+                            ),
+                          ),
+                          style: ElevatedButton.styleFrom(
+                            backgroundColor: Colors.blue,
+                            padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 12),
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(12),
+                            ),
+                          ),
+                        ),
                       ),
                       
                       const SizedBox(height: 40),

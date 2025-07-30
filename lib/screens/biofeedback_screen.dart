@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import '../widgets/graph_widget.dart';
+import '../widgets/live_chart_widget.dart';
 import '../services/esp32_service.dart';
 
 class BiofeedbackScreen extends StatefulWidget {
@@ -116,8 +116,8 @@ class _BiofeedbackScreenState extends State<BiofeedbackScreen> {
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
-            // Graph Section
-            const GraphWidget(),
+            // Live Chart Section
+            const LiveChartWidget(),
             
             const SizedBox(height: 30),
             

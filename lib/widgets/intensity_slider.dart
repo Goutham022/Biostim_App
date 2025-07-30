@@ -96,7 +96,6 @@ class _IntensitySliderState extends State<IntensitySlider> {
         
         // Intensity bars with controls
         Row(
-          mainAxisAlignment: MainAxisAlignment.center,
           children: [
             // Decrease button
             GestureDetector(
@@ -116,25 +115,28 @@ class _IntensitySliderState extends State<IntensitySlider> {
               ),
             ),
             
-            const SizedBox(width: 20),
+            const SizedBox(width: 12),
             
             // Intensity bars
-            Row(
-              children: List.generate(widget.maxLevel, (index) {
-                final isActive = index < currentLevel;
-                return Container(
-                  width: 8,
-                  height: 40,
-                  margin: const EdgeInsets.symmetric(horizontal: 2),
-                  decoration: BoxDecoration(
-                    color: isActive ? Colors.green : Colors.green[200],
-                    borderRadius: BorderRadius.circular(4),
-                  ),
-                );
-              }),
+            Expanded(
+              child: Row(
+                children: List.generate(widget.maxLevel, (index) {
+                  final isActive = index < currentLevel;
+                  return Expanded(
+                    child: Container(
+                      height: 40,
+                      margin: const EdgeInsets.symmetric(horizontal: 1),
+                      decoration: BoxDecoration(
+                        color: isActive ? Colors.green : Colors.green[200],
+                        borderRadius: BorderRadius.circular(2),
+                      ),
+                    ),
+                  );
+                }),
+              ),
             ),
             
-            const SizedBox(width: 20),
+            const SizedBox(width: 12),
             
             // Increase button
             GestureDetector(
